@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -23,10 +24,10 @@ import java.util.Map;
 
 public class registro extends AppCompatActivity {
 
-    public Button registro;
+    public Button registro, login;
     public EditText nombre, correo, pass;
-     FirebaseFirestore mFirestore;
-     FirebaseAuth mAuth;
+    FirebaseFirestore mFirestore;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,16 @@ public class registro extends AppCompatActivity {
         pass = findViewById(R.id.editPass);
 
         registro = findViewById(R.id.btnRegistro);
+        login = findViewById(R.id.btnLogin);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent i = new Intent(getApplicationContext(), login.class);
+                startActivity(i);
+            }
+        });
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +59,7 @@ public class registro extends AppCompatActivity {
                 String emailUser = correo.getText().toString().trim();
                 String passUser = pass.getText().toString().trim();
 
-                if (nameUser.isEmpty() && emailUser.isEmpty() && passUser.isEmpty()){
+                if (nameUser.isEmpty() || emailUser.isEmpty() || passUser.isEmpty()){
                     Toast.makeText(registro.this, "Campos vacios, Complete los datos", Toast.LENGTH_SHORT).show();
                 }else{
                     registroUser(nameUser, emailUser, passUser);
@@ -62,31 +73,15 @@ public class registro extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(emailUser, passUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                String id = mAuth.getCurrentUser().getUid();
-                Map<String, Object> map = new HashMap<>();
-                map.put("id", id);
-                map.put("name", nameUser);
-                map.put("email", emailUser);
-                map.put("password", passUser);
+                if (task.isSuccessful()){
+                    Toast.makeText(registro.this, "Usuario creado", Toast.LENGTH_SHORT).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Intent i = new Intent(getApplicationContext(), login.class);
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Fallo al crear usuario",Toast.LENGTH_SHORT).show();
+                }
 
-                mFirestore.collection("usuarios").document(id).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        finish();
-                        startActivities(new Intent[]{new Intent(registro.this, MainActivity.class)});
-                        Toast.makeText(registro.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(registro.this, "ERROR AL GUARDAR", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(registro.this, "ERROR AL REGISTRAR", Toast.LENGTH_SHORT).show();
             }
         });
     }
