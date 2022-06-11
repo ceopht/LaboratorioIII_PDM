@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -25,20 +28,20 @@ import java.util.Map;
 public class registro extends AppCompatActivity {
 
     public Button registro, login;
-    public EditText nombre, correo, pass;
-    FirebaseFirestore mFirestore;
+    public EditText nombre, correo, pass, carrera;
+    DatabaseReference reference;
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        reference = FirebaseDatabase.getInstance().getReference();
         setContentView(R.layout.activity_registro);
         nombre = findViewById(R.id.editNombre);
         correo = findViewById(R.id.editCorreo);
         pass = findViewById(R.id.editPass);
+        carrera = findViewById(R.id.editCarrera);
 
         registro = findViewById(R.id.btnRegistro);
         login = findViewById(R.id.btnLogin);
@@ -64,7 +67,6 @@ public class registro extends AppCompatActivity {
                 }else{
                     registroUser(nameUser, emailUser, passUser);
                 }
-
             }
         });
     }
@@ -74,10 +76,32 @@ public class registro extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(registro.this, "Usuario creado", Toast.LENGTH_SHORT).show();
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Intent i = new Intent(getApplicationContext(), login.class);
-                    startActivity(i);
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("nombre", nombre.getText().toString());
+                    userMap.put("correo", correo.getText().toString());
+                    userMap.put("carrera", carrera.getText().toString());
+
+
+                    String id = mAuth.getCurrentUser().getUid();
+                    Log.d("id", id);
+                    Log.d("userMap", userMap.toString());
+
+                    reference.child("Users").child(id).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task2) {
+                            if (task2.isSuccessful()){
+                                Toast.makeText(registro.this, "Usuario registrado y agregado", Toast.LENGTH_SHORT).show();
+
+                                Intent i = new Intent(getApplicationContext(), login.class);
+                                startActivity(i);
+                                finish();
+                            }else {
+                                Toast.makeText(registro.this, "registrado, no agregado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
                 }else{
                     Toast.makeText(getApplicationContext(), "Fallo al crear usuario",Toast.LENGTH_SHORT).show();
                 }
