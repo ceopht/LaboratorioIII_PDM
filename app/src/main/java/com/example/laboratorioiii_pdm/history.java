@@ -1,6 +1,7 @@
 package com.example.laboratorioiii_pdm;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -37,8 +39,14 @@ public class history extends AppCompatActivity {
         listaPalabras = new ArrayList<>();
         recyclerViewXD = findViewById(R.id.recyclerViewXD);
         backTo = findViewById(R.id.backTo);
-
         recyclerViewXD.setLayoutManager(new LinearLayoutManager(this));
+
+        //Action bar
+        this.setTitle("Historial");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Users").child(FirebaseAuth.getInstance().getUid()).child("historial").addValueEventListener(new ValueEventListener() {
             @Override
@@ -66,6 +74,15 @@ public class history extends AppCompatActivity {
                 startActivity(new Intent(history.this, principal.class));
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

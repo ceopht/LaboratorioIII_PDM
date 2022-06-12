@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 
 public class principal extends AppCompatActivity {
 
-    Button btnHistorial, btnDiccionario, btnLogOut, btnsubir, btnborrar;
+    Button btnHistorial, btnDiccionario, btnLogOut, btnsubir;
     TextView txtUsername, txtEmail, txtCarrera;
     DatabaseReference reference;
     ImageView photop;
@@ -67,7 +68,6 @@ public class principal extends AppCompatActivity {
         btnLogOut = findViewById(R.id.btnLogOut);
         btnHistorial = findViewById(R.id.btnHistorial);
         btnsubir = findViewById(R.id.btnFoto);
-        btnborrar = findViewById(R.id.btnBorrarF);
         //referencia de los textView
         txtUsername = findViewById(R.id.txtUsername);
         txtEmail = findViewById(R.id.txtEmail);
@@ -78,6 +78,12 @@ public class principal extends AppCompatActivity {
         setearTextViews();
         idd = id;
         getImg();
+
+        //Toolbar
+
+        this.setTitle("Perfil");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         btnsubir.setOnClickListener(new View.OnClickListener() {
             @Override
