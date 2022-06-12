@@ -94,7 +94,10 @@ public class principal extends AppCompatActivity {
         });
 
         btnLogOut.setOnClickListener(v -> {
-            Toast.makeText(principal.this, "Adios", Toast.LENGTH_SHORT).show();
+            mAuth.signOut();
+            finish();
+            Intent i = new Intent(getApplicationContext(), login.class);
+            startActivity(i);
         });
 
     }
