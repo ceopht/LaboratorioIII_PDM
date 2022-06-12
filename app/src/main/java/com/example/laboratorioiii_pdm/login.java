@@ -1,6 +1,7 @@
 package com.example.laboratorioiii_pdm;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -33,6 +34,10 @@ public class login extends AppCompatActivity {
 
         login = findViewById(R.id.btnLogin);
         registrace = findViewById(R.id.btnRe);
+
+        this.setTitle("Iniciar Session");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         registrace.setOnClickListener(new View.OnClickListener() {
             @Override

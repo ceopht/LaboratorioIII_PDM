@@ -1,11 +1,13 @@
 package com.example.laboratorioiii_pdm;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +48,10 @@ public class registro extends AppCompatActivity {
 
         registro = findViewById(R.id.btnRegistro);
         login = findViewById(R.id.btnLogin);
+
+        this.setTitle("Crear cuenta");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,5 +178,13 @@ public class registro extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
