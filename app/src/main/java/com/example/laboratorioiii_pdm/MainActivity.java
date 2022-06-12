@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle bundle = getIntent().getExtras();
+        String palabra = "hello";
+
+        try {
+            palabra = bundle.getString("palabra");
+        }catch (Exception e){
+            palabra = "hello";
+        }
+
         reference = FirebaseDatabase.getInstance().getReference();
         searchView = findViewById(R.id.search_view);
         word = findViewById(R.id.word);
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         //Llamado API
 
         Manejador manager = new Manejador(MainActivity.this);
-        manager.getSignificadoPalabra(listener, "hello");
+        manager.getSignificadoPalabra(listener, palabra);
 
 
 
