@@ -101,9 +101,10 @@ public class principal extends AppCompatActivity {
 
         btnLogOut.setOnClickListener(v -> {
             mAuth.signOut();
-            finish();
+
             Intent i = new Intent(getApplicationContext(), login.class);
             startActivity(i);
+            finish();
         });
 
     }
