@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Ceopht/AndroidStudioProjects/LaboratorioIII_PDM/app/src/main/res/layout/activity_historial.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Ceopht/AndroidStudioProjects/LaboratorioIII_PDM/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Ceopht/AndroidStudioProjects/LaboratorioIII_PDM/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Ceopht/AndroidStudioProjects/LaboratorioIII_PDM/app/src/main/res/layout/activity_principal.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Ceopht/AndroidStudioProjects/LaboratorioIII_PDM/app/src/main/res/layout/activity_registro.xml" value="0.36666666666666664" />
       </map>
     </option>
