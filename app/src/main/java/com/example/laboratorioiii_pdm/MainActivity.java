@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
-        historialMap.put("historial", histori);
+        historialMap.put("palabra", histori);
 
         Log.d("id", (uid));
         Log.d("userMap", historialMap.toString());
