@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LaboratorioIII_PDM">
         <activity
+            android:name=".history"
+            android:exported="false" />
+        <activity
             android:name=".principal"
             android:exported="false" />
         <activity

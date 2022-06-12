@@ -41,7 +41,7 @@ public class principal extends AppCompatActivity {
         });
 
         btnHistorial.setOnClickListener(v -> {
-            startActivity(new Intent(principal.this, HistorialPalabras.class));
+            startActivity(new Intent(principal.this, history.class));
         });
 
         btnLogOut.setOnClickListener(v -> {
