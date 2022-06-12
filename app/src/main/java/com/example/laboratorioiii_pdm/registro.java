@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +29,7 @@ public class registro extends AppCompatActivity {
     public Button registro, login;
     public EditText nombre, correo, pass, carrera;
     DatabaseReference reference;
+    FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
 
     @Override
@@ -37,6 +37,7 @@ public class registro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference();
+        mFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_registro);
         nombre = findViewById(R.id.editNombre);
         correo = findViewById(R.id.editCorreo);
@@ -61,15 +62,22 @@ public class registro extends AppCompatActivity {
                 String nameUser = nombre.getText().toString().trim();
                 String emailUser = correo.getText().toString().trim();
                 String passUser = pass.getText().toString().trim();
+                String nameUser2 = nombre.getText().toString().trim();
+                String emailUser2 = correo.getText().toString().trim();
+                String passUser2 = pass.getText().toString().trim();
 
                 if (nameUser.isEmpty() || emailUser.isEmpty() || passUser.isEmpty()){
                     Toast.makeText(registro.this, "Campos vacios, Complete los datos", Toast.LENGTH_SHORT).show();
                 }else{
+                    //registerUser2(nameUser2, emailUser2, passUser2);
                     registroUser(nameUser, emailUser, passUser);
+
                 }
             }
         });
     }
+
+
 
     private void registroUser(String nameUser, String emailUser, String passUser) {
         mAuth.createUserWithEmailAndPassword(emailUser, passUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -92,9 +100,9 @@ public class registro extends AppCompatActivity {
                             if (task2.isSuccessful()){
                                 Toast.makeText(registro.this, "Usuario registrado y agregado", Toast.LENGTH_SHORT).show();
 
-                                Intent i = new Intent(getApplicationContext(), login.class);
-                                startActivity(i);
-                                finish();
+                                //Intent i = new Intent(getApplicationContext(), login.class);
+                                //startActivity(i);
+                                //finish();
                             }else {
                                 Toast.makeText(registro.this, "registrado, no agregado", Toast.LENGTH_SHORT).show();
                             }
@@ -104,9 +112,65 @@ public class registro extends AppCompatActivity {
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Fallo al crear usuario",Toast.LENGTH_SHORT).show();
+
                 }
+                String ida = mAuth.getCurrentUser().getUid();
+                Map<String, Object> map = new HashMap<>();
+                Log.d("idxd", ida);
+                map.put("id", ida.toString());
+                map.put("name", nombre.getText().toString());
+                map.put("email", correo.getText().toString());
+                map.put("password", pass.getText().toString());
+
+                mFirestore.collection("user").document(ida).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        finish();
+                        startActivity(new Intent(registro.this, login.class));
+                        Toast.makeText(registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(registro.this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
     }
+    private void registerUser2(String nameUser, String emailUser, String passUser) {
+        mAuth.createUserWithEmailAndPassword(emailUser, passUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                String ida = mAuth.getCurrentUser().getUid();
+                Map<String, Object> map = new HashMap<>();
+                Log.d("idxd", ida);
+                map.put("id", ida.toString());
+                map.put("name", nombre.getText().toString());
+                map.put("email", correo.getText().toString());
+                map.put("password", carrera.getText().toString());
+
+                mFirestore.collection("user").document(ida).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        finish();
+                        startActivity(new Intent(registro.this, login.class));
+                        Toast.makeText(registro.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(registro.this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(registro.this, "Error al registrar", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

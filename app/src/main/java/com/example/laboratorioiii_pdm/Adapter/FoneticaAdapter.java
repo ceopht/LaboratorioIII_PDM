@@ -47,7 +47,7 @@ public class FoneticaAdapter extends RecyclerView.Adapter<FoneticaViewHolder> {
                 MediaPlayer player = new MediaPlayer();
                 try{
                     player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    player.setDataSource("https:"+foneticaList.get(position).getAudio());
+                    player.setDataSource(foneticaList.get(position).getAudio());
                     player.prepare();
                     player.start();
                 }catch (Exception e){
