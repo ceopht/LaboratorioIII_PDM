@@ -44,7 +44,7 @@ public class history extends AppCompatActivity {
         //Action bar
         this.setTitle("Historial");
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
 
         reference = FirebaseDatabase.getInstance().getReference();
@@ -79,7 +79,9 @@ public class history extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                finish();
+                Intent i = new Intent(getApplicationContext(), history.class);
+                startActivity(i);
                 return true;
         }
         return super.onOptionsItemSelected(item);
